@@ -104,7 +104,7 @@
         android:layout_marginEnd="27dp"
         android:layout_marginRight="27dp"
         android:layout_marginBottom="20dp"
-        android:text="$0"
+        android:text="$14"
         app:layout_constraintBottom_toTopOf="@+id/textView10"
         app:layout_constraintEnd_toStartOf="@+id/childQuantity"
         app:layout_constraintStart_toEndOf="@+id/textView2" />
