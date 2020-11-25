@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 public class PriceCheckActivity extends AppCompatActivity {
 
-    ImageButton momaButton;
+    ImageButton museumButton;
     Button calculateButton;
     EditText childQuantity;
     EditText adultQuantity;
@@ -28,6 +28,10 @@ public class PriceCheckActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_check);
 
+        Intent intent = getIntent();
+        String museumName = intent.getExtras().getString("MUSEUM_NAME");
+
+
         Context context = getBaseContext();
         CharSequence text = "Maximum of 5 tickets for each!";
         int duration = Toast.LENGTH_SHORT;
@@ -35,26 +39,43 @@ public class PriceCheckActivity extends AppCompatActivity {
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
 
-        momaButton = (ImageButton) findViewById(R.id.moma_button);
+        museumButton = (ImageButton) findViewById(R.id.moma_button);
 
         //Open Chrome and direct to MOMA Link
-        momaButton.setOnClickListener(new View.OnClickListener() {
+        museumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.moma.org/visit/"));
+
+                Uri museumSelect = Uri.parse("https://www.moma.org/visit/");
+
+                if (museumName.equals("MOMA")) {
+                    museumSelect = Uri.parse("https://www.moma.org/visit/");
+                }
+                else if (museumName.equals("MET")) {
+                    museumSelect = Uri.parse("https://www.metmuseum.org/");
+                }
+                else if (museumName.equals("Guggenheim")) {
+                    museumSelect = Uri.parse("https://www.guggenheim.org/");
+                }
+                else if (museumName.equals("Whitney")) {
+                    museumSelect = Uri.parse("https://whitney.org/");
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, museumSelect);
                 startActivity(intent);
             }
         });
-
 
 
         childQuantity = (EditText) findViewById(R.id.childQuantity);
         adultQuantity = (EditText) findViewById(R.id.adultQuantity);
         seniorQuantity = (EditText) findViewById(R.id.seniorQuantity);
 
-
         calculateButton = (Button) findViewById(R.id.calculate_btn);
         total = (TextView) findViewById(R.id.priceTotal);
+
+
+        total.setText("0.00");
 
         //Calculate total price of tickets
         calculateButton.setOnClickListener(new View.OnClickListener() {
@@ -66,42 +87,12 @@ public class PriceCheckActivity extends AppCompatActivity {
                 final double ADULT_RATE = 25;
                 final double SENIOR_RATE = 18;
                 final int DEFAULT_QUANT = 0;
+                final int MAX_TICKETS = 5;
                 int child_quant;
                 int adult_quant;
                 int senior_quant;
 
 
-//                try {
-//
-//                    child_quant = Integer.parseInt(childQuantity.getText().toString());
-//                    adult_quant = Integer.parseInt(adultQuantity.getText().toString());
-//                    senior_quant = Integer.parseInt(seniorQuantity.getText().toString());
-//
-//                    //calculate subtotal
-//                    double subtotal = ((CHILD_RATE * child_quant) + (ADULT_RATE * adult_quant) +
-//                            (SENIOR_RATE * senior_quant));
-//
-//                    //calculate tax
-//                    double total_tax = subtotal * TAX_RATE;
-//
-//                    //calculate final price
-//                    double total_price = subtotal + total_tax;
-//
-//                    // set total price to total TextView
-//                    total.setText(Double.toString(total_price));
-//
-//                }
-//                catch(NumberFormatException ex) {
-//                    //They didn't enter a number.  Pop up a toast or warn them in some other way
-//
-//                    Context context = getBaseContext();
-//                    CharSequence text = "Missing Quantity!";
-//                    int duration = Toast.LENGTH_SHORT;
-//
-//                    Toast toast = Toast.makeText(context, text, duration);
-//                    toast.show();
-//
-//                }
 
                 if (childQuantity.getText().toString().length() > 0) {
                     child_quant = Integer.parseInt(childQuantity.getText().toString());
@@ -124,20 +115,30 @@ public class PriceCheckActivity extends AppCompatActivity {
                     senior_quant = DEFAULT_QUANT;
                 }
 
-                //calculate subtotal
-                double subtotal = ((CHILD_RATE * child_quant) + (ADULT_RATE * adult_quant) +
-                        (SENIOR_RATE * senior_quant));
 
-                //calculate tax
-                double total_tax = subtotal * TAX_RATE;
+                if(child_quant > MAX_TICKETS || adult_quant > MAX_TICKETS || senior_quant > MAX_TICKETS) {
+                    Context context = getBaseContext();
+                    CharSequence text = "INVALID: Maximum of 5 tickets for each type is required.";
+                    int duration = Toast.LENGTH_SHORT;
 
-                //calculate final price
-                double total_price = subtotal + total_tax;
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
+                }
+                else {
+                    //calculate subtotal
+                    double subtotal = ((CHILD_RATE * child_quant) + (ADULT_RATE * adult_quant) +
+                            (SENIOR_RATE * senior_quant));
 
-                // set total price to total TextView
-                total.setText(Double.toString(total_price));
+                    //calculate tax
+                    double total_tax = subtotal * TAX_RATE;
 
-                //total.setText(String.format("%0.2f", total_price));
+                    //calculate final price
+                    double total_price = subtotal + total_tax;
+
+                    // set total price to total TextView
+                    total.setText(String.format("%.2f", total_price));
+                }
+
             }
         });
 
