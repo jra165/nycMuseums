@@ -71,6 +71,7 @@
         <item>5</item>
     </string-array>
 
+    <string name = "museum_indicator">MUSEUM_NAME</string>
     <string name = "image_description">An image of the museum.</string>
 
 </resources>

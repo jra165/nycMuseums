@@ -7,6 +7,8 @@ package com.example.nycmuseums;
  */
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -56,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
                 String radioText = r.getText().toString();
 
                 //pass the name of the museum into the new Intent for the next activity
+                Context context = getBaseContext();
                 Intent i = new Intent(MainActivity.this, PriceCheckActivity.class);
-                i.putExtra("MUSEUM_NAME",radioText);
+                i.putExtra(context.getResources().getString(R.string.museum_indicator),radioText);
                 button = (RadioButton) findViewById(selectId);
                 startActivity(i);
 
