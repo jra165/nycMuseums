@@ -1,11 +1,17 @@
 package com.example.nycmuseums;
 
+/**
+ * The PriceCheck class is the class that displays appropriate museum information based on selection
+ * and allows the user to calculate the cost of their museum visit by selecting quantities
+ * of different types of tickets.
+ * @authors Joshua Atienza, Kyle Lee
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.content.Intent;
 import android.net.Uri;
 import android.widget.Toast;
@@ -32,8 +38,9 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
 
 
     /**
-     *
-     * @param savedInstanceState
+     * Sets the initial view of the PriceCheckActivity with the appropriate title,
+     * museum image and pricing info
+     * @param savedInstanceState The associated Bundle with PriceCheckActivity
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +48,23 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
         setContentView(R.layout.activity_price_check);
         setTitle(R.string.price_name);
 
+        //Display toast message that only 5 tickets of each kind can be selected
         Context context = getBaseContext();
         CharSequence text = context.getResources().getString(R.string.toast_message);
         int duration = Toast.LENGTH_SHORT;
-
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
 
-        museumButton = (ImageButton) findViewById(R.id.moma_button);
-
-        Intent intent = getIntent();
-        String museumName = intent.getExtras().getString("MUSEUM_NAME");
-
+        museumButton = (ImageButton) findViewById(R.id.museum_button);
         childRate = findViewById(R.id.childRate);
         adultRate = findViewById(R.id.adultRate);
         seniorRate = findViewById(R.id.seniorRate);
         museumInfo = findViewById(R.id.museum_info);
 
+        Intent intent = getIntent();
+        String museumName = intent.getExtras().getString("MUSEUM_NAME");
+
+        //display MOMA information
         if(museumName.equals(context.getResources().getString(R.string.moma_name))) {
             museumButton.setImageResource(R.drawable.moma);
             museumInfo.setText(R.string.moma_info);
@@ -66,6 +73,7 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
             seniorRate.setText(R.string.sr_name);
         }
 
+        //display MET information
         else if(museumName.equals(context.getResources().getString(R.string.met_name))) {
             museumButton.setImageResource(R.drawable.met);
             museumInfo.setText(R.string.met_info);
@@ -74,6 +82,7 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
             seniorRate.setText(R.string.sr_name_met);
         }
 
+        //display Guggenheim information
         else if(museumName.equals(context.getResources().getString(R.string.guggenheim_name))) {
             museumButton.setImageResource(R.drawable.guggenheim);
             museumInfo.setText(R.string.guggenheim_info);
@@ -82,6 +91,7 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
             seniorRate.setText(R.string.sr_name_gug);
         }
 
+        //display Whitney information
         else if(museumName.equals(context.getResources().getString(R.string.whitney_name))) {
             museumButton.setImageResource(R.drawable.whitney);
             museumInfo.setText(R.string.whitney_info);
@@ -90,8 +100,13 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
             seniorRate.setText(R.string.sr_name_whit);
         }
 
-        //Open Chrome and direct to MOMA Link
+        //Open Chrome and direct to appropriate museum link
         museumButton.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Redirects the user to th appropriate museum link
+             * @param v The view being clicked, which is the ImageButton
+             */
             @Override
             public void onClick(View v) {
 
@@ -139,10 +154,10 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
         //Calculate total price of tickets
         calculateButton.setOnClickListener(new View.OnClickListener() {
 
-
             /**
-             *
-             * @param v
+             * Calculates the total price of the tickets based on quantities selected and
+             * associated ticket price rates
+             * @param v The view being clicked, which is the Calculate button
              */
             public void onClick(View v) {
 

@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
-        android:id="@+id/moma_button"
+        android:id="@+id/museum_button"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="69dp"
@@ -190,7 +190,7 @@
         android:layout_marginBottom="62dp"
         android:text="@string/default_name"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/moma_button"
+        app:layout_constraintEnd_toEndOf="@+id/museum_button"
         app:layout_constraintStart_toEndOf="@+id/seniorRate" />
 
     <Spinner
