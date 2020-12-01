@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,135 +13,189 @@ import android.content.Context;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Spinner;
 
-public class PriceCheckActivity extends AppCompatActivity {
+public class PriceCheckActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
-    ImageButton momaButton;
+    TextView museumInfo;
+    ImageButton museumButton;
     Button calculateButton;
-    EditText childQuantity;
-    EditText adultQuantity;
-    EditText seniorQuantity;
+    TextView childRate;
+    TextView adultRate;
+    TextView seniorRate;
+    Spinner childQuantity;
+    Spinner adultQuantity;
+    Spinner seniorQuantity;
     TextView total;
+    TextView tax_total;
+    TextView final_total;
 
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_check);
+        setTitle(R.string.price_name);
 
         Context context = getBaseContext();
-        CharSequence text = "Maximum of 5 tickets for each!";
+        CharSequence text = context.getResources().getString(R.string.toast_message);
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();
 
-        momaButton = (ImageButton) findViewById(R.id.moma_button);
+        museumButton = (ImageButton) findViewById(R.id.moma_button);
+
+        Intent intent = getIntent();
+        String museumName = intent.getExtras().getString("MUSEUM_NAME");
+
+        childRate = findViewById(R.id.childRate);
+        adultRate = findViewById(R.id.adultRate);
+        seniorRate = findViewById(R.id.seniorRate);
+        museumInfo = findViewById(R.id.museum_info);
+
+        if(museumName.equals(context.getResources().getString(R.string.moma_name))) {
+            museumButton.setImageResource(R.drawable.moma);
+            museumInfo.setText(R.string.moma_info);
+            childRate.setText(R.string.cr_name);
+            adultRate.setText(R.string.ar_name);
+            seniorRate.setText(R.string.sr_name);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.met_name))) {
+            museumButton.setImageResource(R.drawable.met);
+            museumInfo.setText(R.string.met_info);
+            childRate.setText(R.string.cr_name_met);
+            adultRate.setText(R.string.ar_name_met);
+            seniorRate.setText(R.string.sr_name_met);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.guggenheim_name))) {
+            museumButton.setImageResource(R.drawable.guggenheim);
+            museumInfo.setText(R.string.guggenheim_info);
+            childRate.setText(R.string.cr_name_gug);
+            adultRate.setText(R.string.ar_name_gug);
+            seniorRate.setText(R.string.sr_name_gug);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.whitney_name))) {
+            museumButton.setImageResource(R.drawable.whitney);
+            museumInfo.setText(R.string.whitney_info);
+            childRate.setText(R.string.cr_name_whit);
+            adultRate.setText(R.string.ar_name_whit);
+            seniorRate.setText(R.string.sr_name_whit);
+        }
 
         //Open Chrome and direct to MOMA Link
-        momaButton.setOnClickListener(new View.OnClickListener() {
+        museumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.moma.org/visit/"));
+
+                Uri museumSelect = Uri.parse(context.getResources().getString(R.string.moma_link));
+
+                if (museumName.equals(context.getResources().getString(R.string.moma_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.moma_link));
+                }
+                else if (museumName.equals(context.getResources().getString(R.string.met_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.met_link));
+                }
+                else if (museumName.equals(context.getResources().getString(R.string.guggenheim_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.gugg_link));
+                }
+                else if (museumName.equals(context.getResources().getString(R.string.whitney_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.whit_link));
+                }
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, museumSelect);
                 startActivity(intent);
             }
         });
 
+        childRate = findViewById(R.id.childRate);
+        adultRate = findViewById(R.id.adultRate);
+        seniorRate = findViewById(R.id.seniorRate);
 
-
-        childQuantity = (EditText) findViewById(R.id.childQuantity);
-        adultQuantity = (EditText) findViewById(R.id.adultQuantity);
-        seniorQuantity = (EditText) findViewById(R.id.seniorQuantity);
-
+        childQuantity = findViewById(R.id.childQuantity);
+        childQuantity.setOnItemSelectedListener(this);
+        adultQuantity = findViewById(R.id.adultQuantity);
+        adultQuantity.setOnItemSelectedListener(this);
+        seniorQuantity = findViewById(R.id.seniorQuantity);
+        seniorQuantity.setOnItemSelectedListener(this);
 
         calculateButton = (Button) findViewById(R.id.calculate_btn);
         total = (TextView) findViewById(R.id.priceTotal);
+        tax_total = (TextView) findViewById(R.id.taxTotal);
+        final_total = (TextView) findViewById(R.id.finalTotal);
+
+        total.setText(R.string.default_num);
+        tax_total.setText(R.string.default_num);
+        final_total.setText(R.string.default_num);
+
 
         //Calculate total price of tickets
         calculateButton.setOnClickListener(new View.OnClickListener() {
 
+
+            /**
+             *
+             * @param v
+             */
             public void onClick(View v) {
 
                 final double TAX_RATE = 0.08875;
-                final double CHILD_RATE = 14;
-                final double ADULT_RATE = 25;
-                final double SENIOR_RATE = 18;
-                final int DEFAULT_QUANT = 0;
-                int child_quant;
-                int adult_quant;
-                int senior_quant;
 
+                //pricing rates for each type of ticket
+                double child_rate = Double.parseDouble(childRate.getText().toString());
+                double adult_rate = Double.parseDouble(adultRate.getText().toString());
+                double senior_rate = Double.parseDouble(seniorRate.getText().toString());
 
-//                try {
-//
-//                    child_quant = Integer.parseInt(childQuantity.getText().toString());
-//                    adult_quant = Integer.parseInt(adultQuantity.getText().toString());
-//                    senior_quant = Integer.parseInt(seniorQuantity.getText().toString());
-//
-//                    //calculate subtotal
-//                    double subtotal = ((CHILD_RATE * child_quant) + (ADULT_RATE * adult_quant) +
-//                            (SENIOR_RATE * senior_quant));
-//
-//                    //calculate tax
-//                    double total_tax = subtotal * TAX_RATE;
-//
-//                    //calculate final price
-//                    double total_price = subtotal + total_tax;
-//
-//                    // set total price to total TextView
-//                    total.setText(Double.toString(total_price));
-//
-//                }
-//                catch(NumberFormatException ex) {
-//                    //They didn't enter a number.  Pop up a toast or warn them in some other way
-//
-//                    Context context = getBaseContext();
-//                    CharSequence text = "Missing Quantity!";
-//                    int duration = Toast.LENGTH_SHORT;
-//
-//                    Toast toast = Toast.makeText(context, text, duration);
-//                    toast.show();
-//
-//                }
-
-                if (childQuantity.getText().toString().length() > 0) {
-                    child_quant = Integer.parseInt(childQuantity.getText().toString());
-                }
-                else {
-                    child_quant = DEFAULT_QUANT;
-                }
-
-                if (adultQuantity.getText().toString().length() > 0) {
-                    adult_quant = Integer.parseInt(adultQuantity.getText().toString());
-                }
-                else {
-                    adult_quant = DEFAULT_QUANT;
-                }
-
-                if (seniorQuantity.getText().toString().length() > 0) {
-                    senior_quant = Integer.parseInt(seniorQuantity.getText().toString());
-                }
-                else {
-                    senior_quant = DEFAULT_QUANT;
-                }
+                //get quantity from each spinner as an integer
+                int child_quant = Integer.parseInt(childQuantity.getSelectedItem().toString());
+                int adult_quant = Integer.parseInt(adultQuantity.getSelectedItem().toString());;
+                int senior_quant = Integer.parseInt(seniorQuantity.getSelectedItem().toString());
 
                 //calculate subtotal
-                double subtotal = ((CHILD_RATE * child_quant) + (ADULT_RATE * adult_quant) +
-                        (SENIOR_RATE * senior_quant));
+                double subtotal = ((child_rate * child_quant) + (adult_rate * adult_quant) +
+                        (senior_rate * senior_quant));
 
                 //calculate tax
-                double total_tax = subtotal * TAX_RATE;
+                double calculated_tax = subtotal * TAX_RATE;
 
                 //calculate final price
-                double total_price = subtotal + total_tax;
+                double calculated_price = subtotal + calculated_tax;
 
-                // set total price to total TextView
-                total.setText(Double.toString(total_price));
+                // set calculated numbers to text
+                total.setText(String.format("%.2f", subtotal));
+                tax_total.setText(String.format("%.2f", calculated_tax));
+                final_total.setText(String.format("%.2f", calculated_price));
 
-                //total.setText(String.format("%0.2f", total_price));
             }
         });
 
 }
 
+    /**
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    /**
+     *
+     * @param parent
+     */
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
