@@ -62,7 +62,7 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
         museumInfo = findViewById(R.id.museum_info);
 
         Intent intent = getIntent();
-        String museumName = intent.getExtras().getString("MUSEUM_NAME");
+        String museumName = intent.getExtras().getString(context.getResources().getString(R.string.museum_indicator));
 
         //display MOMA information
         if(museumName.equals(context.getResources().getString(R.string.moma_name))) {
