@@ -7,28 +7,56 @@
 
     <string name = "moma_name">MOMA</string>
     <string name = "met_name">MET</string>
-    <string name = "whitney_name">Guggenheim</string>
-    <string name = "guggenheim_name">Whitney</string>
+    <string name = "guggenheim_name">Guggenheim</string>
+    <string name = "whitney_name">Whitney</string>
 
+    <string name = "moma_info">MOMA Information</string>
+    <string name = "met_info">MET Information</string>
+    <string name = "guggenheim_info">Guggenheim Information</string>
+    <string name = "whitney_info">Whitney Information</string>
+
+    <string name = "toast_error">Please select a museum.</string>
     <string name = "submit_name">Submit</string>
 
-
+    <string name = "toast_message">Maximum of 5 tickets for each!</string>
 
     <string name = "info_name">Museum Information</string>
 
-    <string name = "child_name">Child</string>
+    <string name = "child_name">Student</string>
     <string name = "adult_name">Adult</string>
     <string name = "senior_name">Senior</string>
 
     <string name = "rate_name">Rate ($)</string>
     <string name = "quantity_name">Quantity</string>
 
+
     <string name = "cr_name">14</string>
     <string name = "ar_name">25</string>
     <string name = "sr_name">18</string>
 
+    <string name = "cr_name_met">12</string>
+    <string name = "ar_name_met">25</string>
+    <string name = "sr_name_met">17</string>
+
+    <string name = "cr_name_gug">18</string>
+    <string name = "ar_name_gug">25</string>
+    <string name = "sr_name_gug">18</string>
+
+    <string name = "cr_name_whit">18</string>
+    <string name = "ar_name_whit">25</string>
+    <string name = "sr_name_whit">18</string>
+
+    <string name = "default_num">0.00</string>
+
+
+    <string name = "moma_link">https://www.moma.org/visit/</string>
+    <string name = "met_link">https://www.metmuseum.org/</string>
+    <string name = "gugg_link">https://www.guggenheim.org/</string>
+    <string name = "whit_link">https://whitney.org/</string>
+
+
     <string name = "ticket_name">Ticket Price ($):</string>
-    <string name = "tax_name">Total Tax ($):</string>
+    <string name = "tax_name">8.875% Tax ($):</string>
     <string name = "final_name">Total Price ($):</string>
     <string name = "calculate_name">Calculate</string>
     <string name = "default_name">0.00</string>

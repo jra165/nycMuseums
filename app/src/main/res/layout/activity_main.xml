@@ -29,7 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/radioGroup8"
+        android:id="@+id/museum_radio"
         android:layout_width="125dp"
         android:layout_height="247dp"
         android:layout_marginTop="20dp"
@@ -42,7 +42,8 @@
             android:id="@+id/momaButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/moma_name" />
+            android:text="@string/moma_name"
+            android:checked="true"/>
 
         <RadioButton
             android:id="@+id/metButton"

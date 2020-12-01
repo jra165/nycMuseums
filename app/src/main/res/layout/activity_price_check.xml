@@ -7,13 +7,14 @@
     tools:context=".PriceCheckActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/museum_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="29dp"
+        android:layout_marginLeft="29dp"
         android:layout_marginTop="16dp"
         android:text="@string/info_name"
-        app:layout_constraintEnd_toStartOf="@+id/moma_button"
-        app:layout_constraintStart_toStartOf="@+id/moma_button"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton

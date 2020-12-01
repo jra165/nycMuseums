@@ -17,6 +17,7 @@ import android.widget.Spinner;
 
 public class PriceCheckActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener{
 
+    TextView museumInfo;
     ImageButton museumButton;
     Button calculateButton;
     TextView childRate;
@@ -30,18 +31,18 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
     TextView final_total;
 
 
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_price_check);
         setTitle(R.string.price_name);
 
-        Intent intent = getIntent();
-        String museumName = intent.getExtras().getString("MUSEUM_NAME");
-
-
         Context context = getBaseContext();
-        CharSequence text = "Maximum of 5 tickets for each!";
+        CharSequence text = context.getResources().getString(R.string.toast_message);
         int duration = Toast.LENGTH_SHORT;
 
         Toast toast = Toast.makeText(context, text, duration);
@@ -49,31 +50,70 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
 
         museumButton = (ImageButton) findViewById(R.id.moma_button);
 
+        Intent intent = getIntent();
+        String museumName = intent.getExtras().getString("MUSEUM_NAME");
+
+        childRate = findViewById(R.id.childRate);
+        adultRate = findViewById(R.id.adultRate);
+        seniorRate = findViewById(R.id.seniorRate);
+        museumInfo = findViewById(R.id.museum_info);
+
+        if(museumName.equals(context.getResources().getString(R.string.moma_name))) {
+            museumButton.setImageResource(R.drawable.moma);
+            museumInfo.setText(R.string.moma_info);
+            childRate.setText(R.string.cr_name);
+            adultRate.setText(R.string.ar_name);
+            seniorRate.setText(R.string.sr_name);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.met_name))) {
+            museumButton.setImageResource(R.drawable.met);
+            museumInfo.setText(R.string.met_info);
+            childRate.setText(R.string.cr_name_met);
+            adultRate.setText(R.string.ar_name_met);
+            seniorRate.setText(R.string.sr_name_met);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.guggenheim_name))) {
+            museumButton.setImageResource(R.drawable.guggenheim);
+            museumInfo.setText(R.string.guggenheim_info);
+            childRate.setText(R.string.cr_name_gug);
+            adultRate.setText(R.string.ar_name_gug);
+            seniorRate.setText(R.string.sr_name_gug);
+        }
+
+        else if(museumName.equals(context.getResources().getString(R.string.whitney_name))) {
+            museumButton.setImageResource(R.drawable.whitney);
+            museumInfo.setText(R.string.whitney_info);
+            childRate.setText(R.string.cr_name_whit);
+            adultRate.setText(R.string.ar_name_whit);
+            seniorRate.setText(R.string.sr_name_whit);
+        }
+
         //Open Chrome and direct to MOMA Link
         museumButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Uri museumSelect = Uri.parse("https://www.moma.org/visit/");
+                Uri museumSelect = Uri.parse(context.getResources().getString(R.string.moma_link));
 
-                if (museumName.equals("MOMA")) {
-                    museumSelect = Uri.parse("https://www.moma.org/visit/");
+                if (museumName.equals(context.getResources().getString(R.string.moma_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.moma_link));
                 }
-                else if (museumName.equals("MET")) {
-                    museumSelect = Uri.parse("https://www.metmuseum.org/");
+                else if (museumName.equals(context.getResources().getString(R.string.met_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.met_link));
                 }
-                else if (museumName.equals("Guggenheim")) {
-                    museumSelect = Uri.parse("https://www.guggenheim.org/");
+                else if (museumName.equals(context.getResources().getString(R.string.guggenheim_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.gugg_link));
                 }
-                else if (museumName.equals("Whitney")) {
-                    museumSelect = Uri.parse("https://whitney.org/");
+                else if (museumName.equals(context.getResources().getString(R.string.whitney_name))) {
+                    museumSelect = Uri.parse(context.getResources().getString(R.string.whit_link));
                 }
 
                 Intent intent = new Intent(Intent.ACTION_VIEW, museumSelect);
                 startActivity(intent);
             }
         });
-
 
         childRate = findViewById(R.id.childRate);
         adultRate = findViewById(R.id.adultRate);
@@ -91,14 +131,19 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
         tax_total = (TextView) findViewById(R.id.taxTotal);
         final_total = (TextView) findViewById(R.id.finalTotal);
 
-        total.setText("0.00");
-        tax_total.setText("0.00");
-        final_total.setText("0.00");
+        total.setText(R.string.default_num);
+        tax_total.setText(R.string.default_num);
+        final_total.setText(R.string.default_num);
 
 
         //Calculate total price of tickets
         calculateButton.setOnClickListener(new View.OnClickListener() {
 
+
+            /**
+             *
+             * @param v
+             */
             public void onClick(View v) {
 
                 final double TAX_RATE = 0.08875;
@@ -133,11 +178,22 @@ public class PriceCheckActivity extends AppCompatActivity implements AdapterView
 
 }
 
+    /**
+     *
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
     }
 
+    /**
+     *
+     * @param parent
+     */
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
