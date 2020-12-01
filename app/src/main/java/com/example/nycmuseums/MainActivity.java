@@ -1,5 +1,11 @@
 package com.example.nycmuseums;
 
+/**
+ * The MainActivity class is the class that displays the first activity with the
+ * list of 4 museums, and allows the user to choose one of the four options.
+ * @authors Joshua Atienza, Kyle Lee
+ */
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -7,7 +13,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.content.Intent;
-import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -16,58 +21,48 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity {
     private Button button;
     private RadioGroup museumGroup;
-    private RadioButton museum;
 
+    /**
+     * Sets MainActivity UI with its title as soon as it's created
+     * @param savedInstanceState The associated Bundle with MainActivity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setTitle(R.string.app_name);
 
         addListenerOnButton();
 
-        /*button = (Button) findViewById(R.id.button6);
+    }
+
+
+    /**
+     * Adds the radio group of museums to the MainActivity
+     */
+    public void addListenerOnButton() {
+        museumGroup = (RadioGroup) findViewById(R.id.museum_radio);
+        button = (Button) findViewById(R.id.submitButton);
+
         button.setOnClickListener(new View.OnClickListener() {
+
+            /**
+             * Redirects user to appropriate museum pricing page, according to selection
+             * @param v The view being clicked, which is the submit button
+             */
             @Override
             public void onClick(View v) {
-                openPriceCheckActivity();
-            }
-        });*/
-    }
 
-    /*public void openPriceCheckActivity() {
-        Intent intent = new Intent(this, PriceCheckActivity.class);
-        startActivity(intent);
-    }*/
-
-
-    public void openPriceCheckActivityNEW(String museumName) {
-        Intent intent = new Intent(this, PriceCheckActivity.class);
-        intent.putExtra("MUSEUM_NAME", museumName);
-        startActivity(intent);
-    }
-
-    public void addListenerOnButton() {
-        museumGroup = (RadioGroup) findViewById(R.id.radioGroup8);
-        button = (Button) findViewById(R.id.button6);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            //@Override
-            public void onClick(View v) {
-
-                //RadioButton r = (RadioButton) museumGroup.getChildAt()
+                //get the selected museum from the radio group
                 int selectId = museumGroup.getCheckedRadioButtonId();
                 RadioButton r = (RadioButton) findViewById(selectId);
                 String radioText = r.getText().toString();
 
-                Context context = getBaseContext();
-                CharSequence text = radioText;
-                int duration = Toast.LENGTH_LONG;
-
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
-
+                //pass the name of the museum into the new Intent for the next activity
+                Intent i = new Intent(MainActivity.this, PriceCheckActivity.class);
+                i.putExtra("MUSEUM_NAME",radioText);
                 button = (RadioButton) findViewById(selectId);
-                openPriceCheckActivityNEW(radioText);
+                startActivity(i);
 
             }
 
@@ -75,5 +70,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 
 }
